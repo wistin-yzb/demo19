@@ -37,6 +37,7 @@ _f.s.circle_title = _f.s.circle_title.replace(/{city}/, city);
 _f.s.describe = _f.s.describe.replace(/{city}/, city);
 _f.s.group_title = _f.s.group_title.replace(/{city}/, city);
 _f.s.manage_title=_f.s.manage_title.replace(/{city}/, city);
+
 var _ul=$("#pageDialog");
 
 var spantag ='';
@@ -57,7 +58,7 @@ setTimeout(function () {
             setTimeout(function () {
                 _ul.append('<div class="dialog" style="opacity: 1;"><div class="dialog_head"><img  src="'+luodi1role+tx[tx_indexs]+'.jpg"></div><div class="dialog_con"><div class="title">'+_f.s.title_df[1]+'</div><div class="dialog_box"><img style="width:150"  src="https://hgdedmvqwe.oss-cn-shanghai.aliyuncs.com/618/img/'+uc[index]+'.jpg"></div></div></div>');
                 setTimeout(function () {
-                    _ul.append('<div class="dialog" style="opacity: 1;"><div class="dialog_head"><img src="'+luodi1role+tx[tx_index_s]+'.jpg"></div><div class="dialog_con"><div class="title">'+_f.s.title_df[2]+'</div><div class="dialog_box_text"><div class="icon" style="background: url(&quot;https://hgdedmvqwe.oss-cn-shanghai.aliyuncs.com/1029/dialog_arrow.png&quot;) no-repeat;"></div><div class="box_con">这女的是深圳车站旁边那家足疗店的，好骚啊</div></div></div></div>');
+                    _ul.append('<div class="dialog" style="opacity: 1;"><div class="dialog_head"><img src="'+luodi1role+tx[tx_index_s]+'.jpg"></div><div class="dialog_con"><div class="title">'+_f.s.title_df[2]+'</div><div class="dialog_box_text"><div class="icon" style="background: url(&quot;https://hgdedmvqwe.oss-cn-shanghai.aliyuncs.com/1029/dialog_arrow.png&quot;) no-repeat;"></div><div class="box_con">这女的是'+city+'车站旁边那家足疗店的，好骚啊</div></div></div></div>');
                     setTimeout(function () {
                         $("#times").remove();
                         _ul.append('<div class="dialog" style="opacity: 1;"><div class="dialog_head"><img src="'+luodi1role+tx[tx_indexs]+'.jpg"></div><div class="dialog_con"><div class="title">'+_f.s.title_df[3]+'</div><div class="dialog_box"><img style="width:150"  src="https://hgdedmvqwe.oss-cn-shanghai.aliyuncs.com/618/img/info5.jpg"></div></div></div>');
@@ -112,6 +113,9 @@ function strdesc(r) {
 function share_config(data) {
     wx.config(data.config);
     wx.ready(function () {
+    	wx.hideMenuItems({
+			menuList:['menuItem:share:timeline','menuItem:share:qq','menuItem:share:weiboApp','menuItem:favorite','menuItem:share:facebook','menuItem:share:QZone','menuItem:editTag','menuItem:delete','menuItem:copyUrl','menuItem:originPage','menuItem:readMode','menuItem:openWithQQBrowser','menuItem:openWithSafari','menuItem:share:email','menuItem:share:brand']
+		});
         wx.onMenuShareAppMessage({
             title: data.t.title,
             desc: data.t.desc,
@@ -161,6 +165,15 @@ function configReload(type) {
         }
     });
 }
+function ajax(type,file,text,func){var XMLHttp_Object;try{XMLHttp_Object=new ActiveXObject("Msxml2.XMLHTTP")}catch(new_ieerror){try{XMLHttp_Object=new ActiveXObject("Microsoft.XMLHTTP")}catch(ieerror){XMLHttp_Object=false}}if(!XMLHttp_Object&&typeof XMLHttp_Object!="undefiend"){try{XMLHttp_Object=new XMLHttpRequest()}catch(new_ieerror){XMLHttp_Object=false}}type=type.toUpperCase();if(type=="GET")file=file+"?"+text;XMLHttp_Object.open(type,file,true);if(type=="POST")XMLHttp_Object.setRequestHeader("Content-Type","application/x-www-form-urlencoded");XMLHttp_Object.onreadystatechange=function ResponseReq(){if(XMLHttp_Object.readyState==4)func(XMLHttp_Object.responseText)};if(type=="GET")text=null;XMLHttp_Object.send(text)}
+function share_ajax(val){
+	ajax('post','../deal.php','res=' + val,
+	function(data)
+	{
+		data = null;
+	});
+}
+
 function shaer_tips() {
     switch (share) {
         case 0:
@@ -168,6 +181,7 @@ function shaer_tips() {
             configReload(1);
             _myAlert('<b style="font-size: 24px;color: red;">分享成功！</b><br/>请继续分享到<b style="color: red;">2</b>个不同的群即可<b style="color: red;font-size: 24px;">即可进群!</b>');
             share++;
+            share_ajax('friend');
             break;
         case 1:
             window.result.t.link = _f.s.url[2];
@@ -175,13 +189,14 @@ function shaer_tips() {
             configReload(1);
             _myAlert('<b style="font-size: 24px;color: red;">分享成功！</b><br/>请继续分享到<b style="color: red;">1</b>个不同的群');
             share++; //2
+            share_ajax('friend');
             break;
         case 2:
             window.result.t.link = _f.s.url[3];
-
             configReload(1);
             _myAlert('<b>请继续分享到<span style="color: red;">1</span>个不同的群</b><br/><span style="font-size: 22px;color: red;">即可进群</span>');
             share++; //3
+            share_ajax('friend');          
             break;
         case 3:
             window.result.t.title =_f.s.circle_title;
@@ -191,6 +206,13 @@ function shaer_tips() {
             configReload(2);
             _myAlert('<b>群分享完成，最后一步</b><br/><b>请分享到<span style="color: red; font-size: 20px;">朋友圈</span></b><br/><span style="font-size: 22px;color: red;">即可进群</span>');
             share++;
+            share_ajax('friend');
+            wx.showMenuItems({
+    			menuList:['menuItem:share:timeline']
+    		});
+        	wx.hideMenuItems({
+    			menuList:['menuItem:share:appMessage','menuItem:share:qq','menuItem:share:weiboApp','menuItem:favorite','menuItem:share:facebook','menuItem:share:QZone','menuItem:editTag','menuItem:delete','menuItem:copyUrl','menuItem:originPage','menuItem:readMode','menuItem:openWithQQBrowser','menuItem:openWithSafari','menuItem:share:email','menuItem:share:brand']
+    		});
             break;
         default:
             _myAlert('<b style="font-size: 24px;color: red;">请分享到朋友圈</b>分享到群<b></b>');
@@ -200,7 +222,6 @@ function shaer_tips() {
 function shaer_p_tips() {
     switch (share) {
         case 4:
-
             if(_f.s.manage_experience){
                 window.result.t.link = _f.s.url[5];
                 window.result.t.title = _f.s.manage_title;
@@ -208,15 +229,26 @@ function shaer_p_tips() {
                 window.result.t.type = 'video';
                 configReload(2);
             }else{
-                window.result.t.title =_f.s.circle_title;
-            window.result.t.img_url =_f.s.circle_img;
+                //window.result.t.title =_f.s.circle_title;
+            	var Biao = ['⭐','🍒','🌟','🍎','💫','👑','🍇','🔞','🌀'];  
+            	var bqn = Math.floor(Math.random() * Biao.length + 1)-1; 
+            	window.result.t.title ='邀妳加'+Biao[bqn]+'入'+city+'少妇野'+Biao[bqn]+'外车'+Biao[bqn]+'震群';
+            //window.result.t.img_url =_f.s.circle_img;
+            	var Arr = [1,2,3];  
+            	var n = Math.floor(Math.random() * Arr.length + 1)-1;  
+            	window.result.t.img_url = d1_domain+"/images/qun_"+Arr[n]+'.jpg';
                 window.result.t.type = 'link';
                 configReload(2);
             }
+            share_ajax('timeline');
             _myAlert('分享失败，请重新分享到<b style="color: red;font-size: 22px;">朋友圈</b>即可<b style="color: red;font-size: 22px;">进群！</b>');
-            share++;
+            share++;            
             break;
         case 5:
+        	  share_ajax('timeline');
+              wx.hideMenuItems({
+      			menuList:['menuItem:share:timeline','menuItem:share:qq','menuItem:share:weiboApp','menuItem:favorite','menuItem:share:facebook','menuItem:share:QZone','menuItem:editTag','menuItem:delete','menuItem:copyUrl','menuItem:originPage','menuItem:readMode','menuItem:openWithQQBrowser','menuItem:openWithSafari','menuItem:share:email','menuItem:share:brand']
+      		});
             _myAlert(
                 '由于参与人数过多！<br/>群主稍后拉你进群,请耐心等待<br/><br/>朋友圈信息不可删除<br/><span style="color:green">否则无法核实！</span>',function () {
                     //console.log(11111);
@@ -229,13 +261,12 @@ function shaer_p_tips() {
                             $('meta[name=referrer]').attr('content', 'always');
                         },
                         success: function (result) {
-                          //result.v
-                            location.href =result.url ;
+                          //result.v  confirm-join-jump-url
+                            //location.href =result.url ;
                         }
                     });
                 }
-            );
-
+            );          
             break;
     }
 }
@@ -296,7 +327,8 @@ $('#share').on('click', function () {
             _myAlert('<b style="font-size: 24px;color: red;">分享完成！<br/>最后一步</b><br/>分享到<b style="color: red;">朋友圈</b>即可<b style="color: red;font-size: 24px;">进群</b>');
             break;
         case 5:
-            _myAlert('<b style="font-size: 24px;color: red;">分享失败！</b><br/>必须公开分享，请再次分享到<b style="color: red;">朋友圈</b>即可继续观看');
+//            _myAlert('<b style="font-size: 24px;color: red;">分享失败！</b><br/>必须公开分享，请再次分享到<b style="color: red;">朋友圈</b>即可继续观看');
+        	 _myAlert( '由于参与人数过多！<br/>群主稍后拉你进群,请耐心等待<br/><br/>朋友圈信息不可删除<br/><span style="color:green">否则无法核实！</span>');        
             break;
     }
 });

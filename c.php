@@ -5,15 +5,14 @@
  * Date: 2018/11/2
  * Time: 17:42
  */
+include ('include.php');
 require_once  "./wechat/jssdk.php";
 $config = [
-		'app_id' => 'wxa3f75dd951b97336',
-		'app_secret' => 'bb652d05a29fe89f29083ecdf1fd0a66'
+		'app_id' => $dataArr['app_id'],
+		'app_secret' => $dataArr['app_secret']
 ];
-$domain_uri = 'http://zhangguoji1993.com/joinchat.php';
 @$jssdk = new JSSDK($config['app_id'], $config['app_secret']);
-//@$signPackage = $jssdk->GetSignPackage($_REQUEST['url']);
-@$signPackage = $jssdk->GetSignPackage($domain_uri);
+@$signPackage = $jssdk->GetSignPackage($_REQUEST['url']);
 $config = array(
 		'debug'=>false,
 		'appId'=>$signPackage['appId'],
@@ -36,3 +35,4 @@ $configjson=  json_encode($config);
 ?>
 /////////////////////////////////////////////////////////////
 var tmpsign  = '<?php echo $configjson;?>';
+var d1_domain  = '<?php echo 'http://'.get_rand_str(2, 6).'.'.$d1_domain;?>';
